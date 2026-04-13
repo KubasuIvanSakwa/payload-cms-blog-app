@@ -1,60 +1,54 @@
 import Image from 'next/image'
 import { ArticleMetadata } from '../_components/article-metadata'
+import { getArticleBySlug } from '@/collections/Articles/fetchers'
+import { RichText } from '@/lib/payload/helpers/components/rich-text'
+import { notFound } from 'next/navigation'
+import { realtionIsObject } from '@/lib/payload/helpers/relation-is-object'
 
 const publishedAt = new Date('2025-11-13T20:45:00')
 
-export default async function BlogPostPage() {
-  return (
-    <div className="prose lg:prose-lg dark:prose-invert">
-      {/* title */}
-      <h1>How To Create a Blog Tutorial No One Asked For</h1>
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const article = await getArticleBySlug(slug)
 
-      {/* metadata */}
-      <ArticleMetadata 
-        intent='post'
-        data={{
+  if (!article) notFound()
+
+  if (!realtionIsObject(article.coverImage)) return null
+  if (!realtionIsObject(article.author) || !realtionIsObject(article.author.avatar)) return null
+
+    return (
+      <div className="prose lg:prose-lg dark:prose-invert">
+        {/* title */}
+        <h1>{article.title}</h1>
+
+        {/* metadata */}
+        <ArticleMetadata
+          intent="post"
+          data={{
             author: {
-                avatar: 'http://via.assets.so/img.jpg?w=600&h=300&bg=6b7280&f=png',
-                name: 'John Doe',
-                role: 'Staff Writer'
+              avatar: article.author.avatar,
+              name: article.author.name,
+              role: article.author.role,
             },
             publishedAt,
-            readTimeMins: 42
-        }}
-        className='not-prose'
-      />
+            readTimeMins: article.readTimeInMins ?? 0,
+          }}
+          className="not-prose"
+        />
 
-      {/* cover image */}
-      <Image
-        src="http://via.assets.so/img.jpg?w=600&h=300&bg=6b7280&f=png"
-        alt="Cover image"
-        width={600}
-        height={300}
-        className="w-full rounded-md object-center object-cover"
-        placeholder="blur"
-        blurDataURL='http://via.assets.so/img.jpg?w=600&h=300&bg=6b7280&f=png'
-      />
+        {/* cover image */}
+        <Image
+          src={article.coverImage.url ?? ''}
+          alt={article.coverImage.alt}
+          width={600}
+          height={300}
+          className="w-full rounded-md object-center object-cover"
+          placeholder="blur"
+          blurDataURL={article.coverImage.blurDataUrl}
+        />
 
-      {/* content */}
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-    </div>
-  )
+        {/* content */}
+        <RichText lexicalData={article.content} />
+      </div>
+    )
 }

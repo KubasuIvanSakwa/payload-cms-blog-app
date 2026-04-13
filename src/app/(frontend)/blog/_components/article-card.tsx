@@ -10,6 +10,7 @@ type ArticleCardProps = {
     coverImage: Media
     publishedAt: Date
     readTimesMins: number
+    blurDataURL: string,
     author: {
         avatar: Media
         name: string
@@ -26,6 +27,7 @@ export function ArticleCard({
     publishedAt,
     readTimesMins,
     author,
+    blurDataURL,
 }: ArticleCardProps ) {
      return (
         <Link href={href} aria-label={`Read article: "${title}"`} className="block">
@@ -38,7 +40,7 @@ export function ArticleCard({
                     height={300}
                     className="h-[200px] object-cover object-center w-full"
                     placeholder="blur"
-                    blurDataURL='http://via.assets.so/img.jpg?w=600&h=300&bg=6b7280&f=png'
+                    blurDataURL={blurDataURL}
                 />
 
                 {/* content */}
