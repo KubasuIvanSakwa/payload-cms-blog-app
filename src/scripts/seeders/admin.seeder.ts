@@ -1,17 +1,14 @@
 import { env } from './../../lib/env';
-import { getPayload } from "payload";
-import config from '@/payload.config'
 import { isDuplicateError } from "../lib/is-duplicate-error";
+import { Payload } from 'payload';
 
-export async function seedAdmin() {
-    const payload = await getPayload({ config })
-
+export async function seedAdmin(payload: Payload) {
     try {
         const response = await payload.create({
             collection: "users",
             data: {
-                email: env.ADMIN_EMAIL || ' ',
-                password: env.ADMIN_PASSWORD || '',
+                email: env.CMS_SEED_ADMIN_EMAIL || ' ',
+                password: env.CMS_SEED_ADMIN_PASSWORD || '',
             }
         })
         console.log("Admin user created:", response)
