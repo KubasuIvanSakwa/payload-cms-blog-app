@@ -2,7 +2,7 @@ import { getPayloadClient } from "@/lib/payload/client"
 import { STATUS_OPTION } from "./constants"
 
 
-export async function getArticles() {
+export async function getPublishedArticles() {
     const payload = await getPayloadClient()
 
     try {

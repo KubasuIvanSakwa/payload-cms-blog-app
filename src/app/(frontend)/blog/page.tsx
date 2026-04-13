@@ -1,4 +1,4 @@
-import { getArticles } from "@/collections/Articles/fetchers";
+import { getPublishedArticles } from "@/collections/Articles/fetchers";
 import { ArticleCard } from "./_components/article-card";
 import { Media } from "@/payload-types";
 
@@ -8,7 +8,7 @@ function realtionIsObject<T>( relation: number | T ): relation is T {
 }
 
 export default async function BlogIndexPage() {
-    const articles = await getArticles()
+    const articles = await getPublishedArticles()
 
     console.log(articles[0])
 
