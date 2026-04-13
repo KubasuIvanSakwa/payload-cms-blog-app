@@ -14,6 +14,14 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
+     remotePatterns: [
+      {
+       protocol: 'http', 
+        hostname: 'via.assets.so',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
