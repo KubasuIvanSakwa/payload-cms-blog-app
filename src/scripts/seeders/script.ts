@@ -1,6 +1,6 @@
 import { getPayloadClient } from "@/lib/payload/client";
 import { seedAdmin } from "./admin.seeder";
-import { seedArticleAuthor } from "./article-author-seeder";
+import { seedArticleAuthor } from "./article-author.seeder";
 
 async function main() {
     const payload = await getPayloadClient()
