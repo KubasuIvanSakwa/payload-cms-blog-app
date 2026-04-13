@@ -1,21 +1,13 @@
 import { getPublishedArticles } from "@/collections/Articles/fetchers";
 import { ArticleCard } from "./_components/article-card";
-import { Media } from "@/payload-types";
-
-
-function realtionIsObject<T>( relation: number | T ): relation is T {
-    return typeof relation !== 'number'
-}
+import { realtionIsObject } from "@/lib/payload/helpers/relation-is-object";
 
 export default async function BlogIndexPage() {
     const articles = await getPublishedArticles()
 
-    console.log(articles[0])
-
     if(!articles.length) {
         return <p>No Articles Found</p>
     }
-
 
     return (
         <div className="grid grid-cols-3 gap-4 w-full">
@@ -32,6 +24,7 @@ export default async function BlogIndexPage() {
                         summary={contentSummary}
                         readTimesMins={readTimeInMins ?? 0}
                         publishedAt={new Date(publishedAt ?? new Date())}
+                        blurDataURL={coverImage.blurDataUrl}
                         coverImage={coverImage}
                         author={{
                                 avatar: author.avatar,

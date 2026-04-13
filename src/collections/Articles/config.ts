@@ -2,7 +2,8 @@ import type { CollectionConfig } from 'payload'
 import { generateSlugHook } from './hooks/generate-slug.hook'
 import { generateContentSummaryHook } from './hooks/generate-content-summary.hook'
 import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext'
-import { STATUS_OPTION } from './constants'
+import { CACHE_TAG_ARTICLES, STATUS_OPTION } from './constants'
+import { revalidateTag } from 'next/cache'
 
 // fields
 // - title ✔
@@ -95,4 +96,7 @@ export const Articles: CollectionConfig = {
       }
     },
   ],
+  hooks: {
+    afterChange: [() => revalidateTag(CACHE_TAG_ARTICLES, '')]
+  }
 }
