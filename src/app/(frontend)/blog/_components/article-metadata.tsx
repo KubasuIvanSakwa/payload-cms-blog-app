@@ -8,7 +8,7 @@ export function ArticleMetadata({
     className,
 }: {
     data: {
-        author: { avatar: Media | string; name: string; role: string }
+        author: { avatar: Media; name: string; role: string }
         publishedAt: Date
         readTimeMins: number
     }
@@ -23,7 +23,7 @@ export function ArticleMetadata({
             <div className={`flex items-center ${intent === 'card' ? 'gap-2' : 'gap-3'}`}>
                 {/* author avatar */}
                 <Image
-                    src='http://via.assets.so/img.jpg?w=600&h=300&bg=6b7280&f=png'
+                    src={author.avatar.url ?? ''}
                     alt={`${author.name}'s avatar`}
                     width={40}
                     height={40}
